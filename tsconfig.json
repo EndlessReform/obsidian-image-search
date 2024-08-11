@@ -19,7 +19,9 @@
       "ES7"
     ]
   },
+  "files": ["src/types/wasm.d.ts"],
   "include": [
     "**/*.ts"
 , "**/*.tsx"  ]
+
 }

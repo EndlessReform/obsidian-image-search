@@ -8,6 +8,7 @@ import {
 	Setting,
 } from "obsidian";
 import { SearchImagesModal } from "src/SearchImagesModal";
+import { VectorServer } from "src/vector_server";
 
 // Remember to rename these classes and interfaces!
 
@@ -19,11 +20,13 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 	mySetting: "default",
 };
 
-export default class ObsidianImageSearch extends Plugin {
+export default class ObsidianImageSearchPlugin extends Plugin {
 	settings: MyPluginSettings;
+	vector_server: VectorServer;
 
 	async onload() {
 		await this.loadSettings();
+		this.vector_server = new VectorServer(this);
 
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon(
@@ -68,6 +71,8 @@ export default class ObsidianImageSearch extends Plugin {
 		this.registerInterval(
 			window.setInterval(() => console.log("setInterval"), 5 * 60 * 1000)
 		);
+
+		await this.vector_server.indexFiles();
 	}
 
 	onunload() {}
@@ -86,9 +91,9 @@ export default class ObsidianImageSearch extends Plugin {
 }
 
 class SampleSettingTab extends PluginSettingTab {
-	plugin: ObsidianImageSearch;
+	plugin: ObsidianImageSearchPlugin;
 
-	constructor(app: App, plugin: ObsidianImageSearch) {
+	constructor(app: App, plugin: ObsidianImageSearchPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
