@@ -10,6 +10,7 @@ import {
 import { SearchImagesModal } from "src/SearchImagesModal";
 import { VectorServer } from "src/vector_server";
 
+export const PLUGIN_NAME = "obsidian-image-search";
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
@@ -72,10 +73,13 @@ export default class ObsidianImageSearchPlugin extends Plugin {
 			window.setInterval(() => console.log("setInterval"), 5 * 60 * 1000)
 		);
 
+		await this.vector_server.onload();
 		await this.vector_server.indexFiles();
 	}
 
-	onunload() {}
+	async onunload() {
+		this.vector_server.onunload();
+	}
 
 	async loadSettings() {
 		this.settings = Object.assign(
